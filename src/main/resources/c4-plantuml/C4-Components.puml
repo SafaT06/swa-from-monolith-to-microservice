@@ -1,0 +1,38 @@
+@startuml Monolith_Components
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+title Monolith - C4 Component Diagram (Controllers, Services, Repositories)
+LAYOUT_LEFT_RIGHT()
+
+Container_Boundary(c_app, "Monolith Spring Boot", "Spring Boot") {
+
+  ' === Controllers ===
+  Component(authController, "AuthController", "Spring @RestController", "Handles register/login endpoints")
+  Component(productController, "ProductController", "Spring @RestController", "CRUD for products")
+  Component(orderController, "OrderController", "Spring @RestController", "Create/get orders")
+
+  ' === Services ===
+  Component(authService, "AuthService", "Spring @Service", "User registration & login logic")
+  Component(orderService, "OrderService", "Spring @Service", "Create order, stock mgmt, payment orchestration")
+  Component(paymentService, "PaymentService", "Spring @Service", "Simulated payment provider")
+
+  ' === Repositories ===
+  Component(userRepo, "UserRepository", "Spring Data JPA @Repository", "CRUD access to User")
+  Component(productRepo, "ProductRepository", "Spring Data JPA @Repository", "CRUD access to Product")
+  Component(orderRepo, "OrderRepository", "Spring Data JPA @Repository", "CRUD access to Order")
+}
+
+' === Relationships (from code) ===
+' Controllers → Services/Repositories
+Rel(authController, authService, "uses", "Method calls")
+Rel(productController, productRepo, "uses", "Direct data access")
+Rel(orderController, orderService, "uses", "Creates orders")
+Rel(orderController, orderRepo, "uses", "Read order by id")
+
+' Services → Repositories/Services
+Rel(authService, userRepo, "uses", "Find/save users")
+Rel(orderService, productRepo, "uses", "Check/update stock")
+Rel(orderService, orderRepo, "uses", "Persist orders")
+Rel(orderService, paymentService, "invokes", "Process payment")
+
+SHOW_LEGEND()
+@enduml

@@ -1,0 +1,27 @@
+meta {
+  name: CreateOrder
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:8080/api/orders
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "userId": 1,
+    "items": [
+      {
+        "productId": 1,
+        "quantity": 1
+      }
+    ]
+  }
+}
+
+settings {
+  encodeUrl: true
+}
