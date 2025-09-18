@@ -1,0 +1,17 @@
+@startuml C4-Payment
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+title Payment Microservice Architecture
+
+System_Boundary(payment_system, "Payment System") {
+    Container(payment_controller, "Payment Controller", "REST API", "Handles HTTP payment requests")
+    Container(payment_service, "Payment Service", "Business Logic", "Payment processing logic with 85% success rate")
+}
+
+System_Ext(order, "Order Amount", "Sends amount to be payed to the controller")
+
+Rel(order, payment_controller, "Calls payment API", "HTTP/REST")
+
+Rel(payment_controller, payment_service, "Delegates to", "Method call")
+
+@enduml
